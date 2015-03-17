@@ -1,36 +1,49 @@
 #inits
 #vars
 empt = " - "
+move = "99"
+currentPlayer = 'X'
+winner = 0;
 
 #make a list to store the game
-emptyRow = [empt, empt, empt]
 
-row0 = [0, 1, 2]
-row1 = [3, 4, 5]
-row2 = [6, 7, 8]
+row0 = [empt, empt, empt]
+row1 = [empt, empt, empt]
+row2 = [empt, empt, empt]
 
 #row[row, col]
 rows = [row0, row1, row2]
 
 #extra '\' let's you put code on multiple lines
-gameboard = '  0 1 2 \n1 '+str(rows[0][0])+' '+str(rows[0][1])+' '+str(rows[0][2])+\
-                    '\n2 '+str(rows[1][0])+' '+str(rows[1][1])+' '+str(rows[1][2])+\
-                    '\n2 '+str(rows[2][0])+' '+str(rows[2][1])+' '+str(rows[2][2])
-print gameboard
-print '\nfirst player is X\nenter your move as a combination of letter and number'
-firstMove = raw_input('--> ')
+            
+def updateDisplay():
+    gameboard = '  0 1 2 \n1 '+str(rows[0][0])+' '+str(rows[0][1])+' '+str(rows[0][2])+\
+                        '\n2 '+str(rows[1][0])+' '+str(rows[1][1])+' '+str(rows[1][2])+\
+                        '\n2 '+str(rows[2][0])+' '+str(rows[2][1])+' '+str(rows[2][2])
+    print gameboard
+    
+    
+def returnNextPlayer(aCurrentPlayer):
+    if aCurrentPlayer == 'X':
+        return 'O'
+    else:
+        return 'X'
 
-indexRow = int(firstMove[0])
-indexCol = int(firstMove[1])
 
-rows[indexRow][indexCol] = 'X'
+def translateInput(aMove):
+    indexRow = int(aMove[0])
+    indexCol = int(aMove[1])
+    rows[indexRow][indexCol] = currentPlayer
 
 
-gameboard = '  0 1 2 \n1 '+str(rows[0][0])+' '+str(rows[0][1])+' '+str(rows[0][2])+\
-                    '\n2 '+str(rows[1][0])+' '+str(rows[1][1])+' '+str(rows[1][2])+\
-                    '\n2 '+str(rows[2][0])+' '+str(rows[2][1])+' '+str(rows[2][2])
+while winner == 0:
+    updateDisplay()
+    print '\ncurrent player is '+ currentPlayer + '\nenter your move as a combination of number and number'
+    move = raw_input('--> ')
+    translateInput(move)
+    currentPlayer =  returnNextPlayer(currentPlayer)
 
-print gameboard
+#check vals
 
 
 
