@@ -10,6 +10,23 @@ if type(firstMove) is str:
     
     
     
+    chars = set('abc,')
+    if any((c in chars) for c in firstMove):
+        print('Found a valid letter')
+    else:
+        print('No valid letter found')
+        
+    chars = set('123,')
+    if any((c in chars) for c in firstMove):
+        print('Found a valid number')
+    else:
+        print('No valid number found')
+    
+    
+    
+    #list of things to check for 
+    # make sure input valid in terms of length, within char and number set
+    
     
     # >>> i = 123
     # >>> type(i)
