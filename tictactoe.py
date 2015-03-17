@@ -48,20 +48,25 @@ def compareThree(var1, var2, var3):
 	else:
 		return 0
              
-def checkValues():
-    for rowCount in range(0, 3):	
-       aResult = compareThree(gridSpots[rowCount][0], gridSpots[rowCount][0+1], gridSpots[rowCount][0+2])
-       if aResult == 1:
+def checkGrid():
+    for count in range(0, 3):	
+       aRowResult = compareThree(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2])
+       aColResult = compareThree(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count])
+       if aRowResult or aColResult == 1:
            return 1
+    lDiagResult = compareThree(gridSpots[0][0], gridSpots[1][1], gridSpots[2][2])
+    rDiagResult = compareThree(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0])
+    if lDiagResult or rDiagResult == 1:
+        return 1
 
 while winner == 0:
     updateDisplay()
     print '\ncurrent player is '+ currentPlayer + '\nenter your move as a combination of number and number'
     move = raw_input('--> ')
     translateInput(move)
-    if checkValues() == 1:
+    if checkGrid() == 1:
         updateDisplay()
-        print('winner received in main loop')
+        print('\nWINNER IS' + currentPlayer + "!!! END OF GAME")
         winner = 1
     currentPlayer =  returnNextPlayer(currentPlayer)
 
