@@ -62,10 +62,10 @@ def checkGrid():
     if lDiagResult or rDiagResult == 1:
         return 1
 
-def checkIfFirstMove():
+def noMovesLeft():
     for countRow in range(0,3):
         for countCol in range(0,3):
-            if gridSpots[countRow][countCol] != " - ": #really bad need to take formatting out of variable
+            if gridSpots[countRow][countCol] == " - ": #really bad need to take formatting out of variable
                 return False
     return True
 
@@ -86,6 +86,11 @@ while winner == 0:
     if checkGrid() == 1:
         updateDisplay()
         print('\nWINNER IS' + currentPlayer + "!!! END OF GAME")
+        winner = 1
+
+    if noMovesLeft():
+        updateDisplay()
+        print('\nNO WINNER. END OF GAME')
         winner = 1
    
     if shouldUpdatePlayer:
