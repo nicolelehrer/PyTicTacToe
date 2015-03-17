@@ -1,3 +1,18 @@
+#inits
+#vars
+empt = " - "
+
+#make a list to store the game
+# emptyRow = [empt, empt, empt]
+
+row0 = [0, 1, 2]
+row1 = [3, 4, 5]
+row2 = [6, 7, 8]
+
+
+rows = [row0, row1, row2]
+
+
 gameboard = '  A B C \n1 - - - \n2 - - - \n3 - - -'
 print gameboard
 print '\nfirst player is X\nenter your move as a combination of letter and number'
@@ -21,6 +36,9 @@ if type(firstMove) is str:
         print('Found a valid number')
     else:
         print('No valid number found')
+    
+    
+    #tranlating user input into a location on the gameboard
     
     
     
