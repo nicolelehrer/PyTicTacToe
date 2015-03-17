@@ -2,7 +2,7 @@
 #vars
 empt = " - "
 move = "99"
-currentPlayer = 'X'
+currentPlayer = ' X '
 winner = 0;
 
 #make a list to store the game
@@ -12,38 +12,62 @@ row1 = [empt, empt, empt]
 row2 = [empt, empt, empt]
 
 #row[row, col]
-rows = [row0, row1, row2]
+gridSpots = [row0, row1, row2]
 
 #extra '\' let's you put code on multiple lines
             
 def updateDisplay():
-    gameboard = '  0 1 2 \n1 '+str(rows[0][0])+' '+str(rows[0][1])+' '+str(rows[0][2])+\
-                        '\n2 '+str(rows[1][0])+' '+str(rows[1][1])+' '+str(rows[1][2])+\
-                        '\n2 '+str(rows[2][0])+' '+str(rows[2][1])+' '+str(rows[2][2])
+    gameboard = '   0   1   2 \n0 '+str(gridSpots[0][0])+' '+str(gridSpots[0][1])+' '+str(gridSpots[0][2])+\
+                        '\n1 '+str(gridSpots[1][0])+' '+str(gridSpots[1][1])+' '+str(gridSpots[1][2])+\
+                        '\n2 '+str(gridSpots[2][0])+' '+str(gridSpots[2][1])+' '+str(gridSpots[2][2])
     print gameboard
     
     
 def returnNextPlayer(aCurrentPlayer):
-    if aCurrentPlayer == 'X':
-        return 'O'
+    if aCurrentPlayer == ' X ':
+        return ' O '
     else:
-        return 'X'
+        return ' X '
 
 
 def translateInput(aMove):
     indexRow = int(aMove[0])
     indexCol = int(aMove[1])
-    rows[indexRow][indexCol] = currentPlayer
+    gridSpots[indexRow][indexCol] = currentPlayer
 
+
+def compareThree(var1, var2, var3):
+	if var1 == " X " or var1 == " O ": #really bad need to take formatting out of variable
+		if var1 == var2:
+			if var1 == var3:
+				return 1			
+			else:
+				return 0
+		else:
+			    return 0
+	else:
+		return 0
+             
+def checkValues():
+    for rowCount in range(0, 3):	
+       aResult = compareThree(gridSpots[rowCount][0], gridSpots[rowCount][0+1], gridSpots[rowCount][0+2])
+       if aResult == 1:
+           return 1
 
 while winner == 0:
     updateDisplay()
     print '\ncurrent player is '+ currentPlayer + '\nenter your move as a combination of number and number'
     move = raw_input('--> ')
     translateInput(move)
+    if checkValues() == 1:
+        updateDisplay()
+        print('winner received in main loop')
+        winner = 1
     currentPlayer =  returnNextPlayer(currentPlayer)
 
-#check vals
+
+
+
 
 
 
