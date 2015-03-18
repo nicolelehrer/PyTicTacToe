@@ -93,18 +93,18 @@ def noMovesLeft():
 def identifyEmptySpots(computerPlayer):
     for countRow in range(0, 3):
         for countCol in range(0, 3):
-            if gridSpots[countRow][countCol] == emptySpot:
-                computerAnswer = str(countRow)+str(countCol)
+            # if gridSpots[countRow][countCol] == emptySpot:
+            if gridSpots[countCol][countRow] == emptySpot:
+                # computerAnswer = str(countRow)+str(countCol)
+                computerAnswer = str(countCol)+str(countRow)
                 return computerAnswer
    
    
 # (3)add some strategy
 def compareToWin(var1, var2, var3, aPlayer):
     holder = [var1, var2, var3]    
-    if holder.count(aPlayer) == 2: # if at least 2 pieces are not equal to -
-        # print(aPlayer + " can win in this move");
-        # get indices of winning move
-        if holder.count(emptySpot) == 1:
+    if holder.count(aPlayer) == 2:  # if there are two instances of the current player
+        if holder.count(emptySpot) == 1:  # and a free spot to move to
             col = holder.index(emptySpot)
             print('spot to win is '+str(col))
             return col           
@@ -113,12 +113,19 @@ def compareToWin(var1, var2, var3, aPlayer):
 
 def recommendNextMove(aCurrentPlayer):        
     for count in range(0, 3):	
-        col = compareToWin(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
-        if col != 99:
-            computerAnswer = str(count)+str(col)
+        aRow = compareToWin(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
+        aCol = compareToWin(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count], aCurrentPlayer)
+
+        if aCol != 99:
+            computerAnswer = str(aCol)+str(count)
             print(computerAnswer)
             return computerAnswer
-            
+        elif aRow != 99:
+            computerAnswer = str(count)+str(aRow)
+            print(computerAnswer)
+            return computerAnswer
+        else:
+            return 99
         
 # ---------------------------------------------------
 
@@ -135,7 +142,11 @@ while winner == 0:
     if currentPlayer == xPlayer:
         move = raw_input('--> ')
     else:
-        move = identifyEmptySpots(currentPlayer)
+        if recommendNextMove(currentPlayer) != 99:
+            move = recommendNextMove(currentPlayer)
+        else:
+            move = identifyEmptySpots(currentPlayer)
+
 
     if inputIsValid(move):
         if spotFree(move):
