@@ -7,7 +7,7 @@ currentPlayer = xPlayer
 winner = 0
 message = 'Blank message'
 
-# make a list to store the game
+# make a list of lists to store the game
 row0 = [emptySpot, emptySpot, emptySpot]
 row1 = [emptySpot, emptySpot, emptySpot]
 row2 = [emptySpot, emptySpot, emptySpot]
@@ -18,10 +18,12 @@ gridSpots = [row0, row1, row2]
 # FUNCTIONS
 # extra '\' let's you put code on multiple lines
 def updateDisplay():
-    gameboard = '   0   1   2 \n0 '+str(gridSpots[0][0])+' '+str(gridSpots[0][1])+' '+str(gridSpots[0][2]) + \
-                        '\n1 '+str(gridSpots[1][0])+' '+str(gridSpots[1][1])+' '+str(gridSpots[1][2]) + \
-                        '\n2 '+str(gridSpots[2][0])+' '+str(gridSpots[2][1])+' '+str(gridSpots[2][2])
-    print '\n'+gameboard+'\n'
+    spacer = " " * len(xPlayer)
+    colHeading = spacer + '0' + spacer + '1' + spacer + '2'
+    print('\n'+colHeading)
+    for row in range(0, 3):
+        gameboard = str(row) + ' ' + (str(gridSpots[row][0])+' '+str(gridSpots[row][1])+' '+str(gridSpots[row][2]))
+        print gameboard
 
 
 def returnNextPlayer(aPlayer):
