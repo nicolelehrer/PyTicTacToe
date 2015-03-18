@@ -1,37 +1,42 @@
-#VARS
-empt = " - "
+# VARS
+emptySpot = " - "
+xPlayer = " X "
+oPlayer = " O "
 move = "99"
-currentPlayer = ' X '
-winner = 0;
+currentPlayer = xPlayer
+winner = 0
 message = 'Blank message'
 
-#make a list to store the game
-row0 = [empt, empt, empt]
-row1 = [empt, empt, empt]
-row2 = [empt, empt, empt]
+# make a list to store the game
+row0 = [emptySpot, emptySpot, emptySpot]
+row1 = [emptySpot, emptySpot, emptySpot]
+row2 = [emptySpot, emptySpot, emptySpot]
 gridSpots = [row0, row1, row2]
-#gridSpots[row][col] access like 2d array
+# gridSpots[row][col] just access it like a 2d array
 
 
-#FUNCTIONS
-#extra '\' let's you put code on multiple lines
+# FUNCTIONS
+# extra '\' let's you put code on multiple lines
 def updateDisplay():
-    gameboard = '   0   1   2 \n0 '+str(gridSpots[0][0])+' '+str(gridSpots[0][1])+' '+str(gridSpots[0][2])+\
-                        '\n1 '+str(gridSpots[1][0])+' '+str(gridSpots[1][1])+' '+str(gridSpots[1][2])+\
+    gameboard = '   0   1   2 \n0 '+str(gridSpots[0][0])+' '+str(gridSpots[0][1])+' '+str(gridSpots[0][2]) + \
+                        '\n1 '+str(gridSpots[1][0])+' '+str(gridSpots[1][1])+' '+str(gridSpots[1][2]) + \
                         '\n2 '+str(gridSpots[2][0])+' '+str(gridSpots[2][1])+' '+str(gridSpots[2][2])
     print '\n'+gameboard+'\n'
-        
-def returnNextPlayer(aCurrentPlayer):
-    if aCurrentPlayer == ' X ':
-        return ' O '
+
+
+def returnNextPlayer(aPlayer):
+    if aPlayer == xPlayer:
+        return oPlayer
     else:
-        return ' X '
+        return xPlayer
+
 
 def translateInput(aMove):
     indexRow = int(aMove[0])
     indexCol = int(aMove[1])
     gridSpots[indexRow][indexCol] = currentPlayer
-            
+
+
 def spotFree(aMove):
     indexRow = int(aMove[0])
     indexCol = int(aMove[1])
@@ -39,124 +44,99 @@ def spotFree(aMove):
         return True
     else:
         return False
-            
+
+
 def inputIsValid(aMove):
-    #length
+    # length
     if len(aMove)!=2:
         return False
-    #range
+    # 'range'
     chars = set('012')
-    if  aMove[0] not in chars or aMove[1] not in chars:
+    if aMove[0] not in chars or aMove[1] not in chars:
         return False
     return True
-        
+
+
 def compareThree(var1, var2, var3):
-	if var1 == " X " or var1 == " O ": #really bad need to take formatting out of variable
-		if var1 == var2:
-			if var1 == var3:
-				return 1			
-			else:
-				return 0
-		else:
-			    return 0
-	else:
-		return 0
-     
+    if var1 != emptySpot:
+        if var1 == var2 and var1 == var3:
+            return 1
+        else:
+            return 0
+    else:
+        return 0
+
+
 def checkGrid():
     for count in range(0, 3):	
-       aRowResult = compareThree(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2])
-       aColResult = compareThree(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count])
-       if aRowResult or aColResult == 1:
-           return 1
+        aRowResult = compareThree(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2])
+        aColResult = compareThree(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count])
+        if aRowResult or aColResult == 1:
+            return 1
     lDiagResult = compareThree(gridSpots[0][0], gridSpots[1][1], gridSpots[2][2])
     rDiagResult = compareThree(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0])
     if lDiagResult or rDiagResult == 1:
         return 1
 
+
 def noMovesLeft():
-    for countRow in range(0,3):
-        for countCol in range(0,3):
-            if gridSpots[countRow][countCol] == " - ": #really bad need to take formatting out of variable
+    for countRow in range(0, 3):
+        for countCol in range(0, 3):
+            if gridSpots[countRow][countCol] == emptySpot:
                 return False
     return True
 
-#---------------------------------------------------
+# ---------------------------------------------------
 
-def recommendNextMove(aCurrentPlayer):
-        
-    #ignoring other placement
-    #if it's the first move go for center
-    #if it's the second move go for corners 
-    #if it's the third move all else equal 
-
-    #considering other placement 
-        #look for where there are two in a row
-        #take third spot 
-        
-    for count in range(0, 3):	
-        compareTwo(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
-    #     compareTwo(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count], aCurrentPlayer)
-    # lDiagResult = compareTwo(gridSpots[0][0], gridSpots[1][1], gridSpots[2][2], aCurrentPlayer)
-    # rDiagResult = compareTwo(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0], aCurrentPlayer)
-
-
-def compareTwo(var1, var2, var3, aPlayer):
     
-    holder = [var1, var2, var3]
-    
-    opposingPlayer = returnNextPlayer(aPlayer)
-    
-    #first check if you can win, then check if you can block
-
-    if aPlayer in holder: #if one of the pieces is equal to one of interest
-        if holder.count(' - ') < 2: #if at least 2 pieces are not equal to -
-            if var1 != ' - ' and var1 == var2 or var1 == var3 or  var2 == var3: #if two pieces are equal 
-                if var1 == ' - ' or  var2 == ' - ' or  var3 == ' - ': #if third piece is empty
-                    print(aPlayer + " can win in this move");
-                    return True
-    # else:
- #        if var1 == opposingPlayer or var2 == opposingPlayer or var3 == opposingPlayer: #if one of the pieces is equal to one of interest
- #            if var1 == var2 or var1 == var3 or  var2 == var3: #if two pieces are equl
- #                if var1 == ' - ' or  var2 == ' - ' or  var3 == ' - ': #if third piece is empty
- #                    print(opposingPlayer + " can be blocked in this move");
- #                    return True
-
-    print('just pic an open spot');
-    return False
-    
-    
-#(1)identify empty spots    
+# (1)identify empty spots
 def identifyEmptySpots(computerPlayer):
-    for countRow in range(0,3):
-        for countCol in range(0,3):
-            if gridSpots[countRow][countCol] == " - ": #really bad need to take formatting out of variable
+    for countRow in range(0, 3):
+        for countCol in range(0, 3):
+            if gridSpots[countRow][countCol] == emptySpot:
                 computerAnswer = str(countRow)+str(countCol)
                 return computerAnswer
-    
-#---------------------------------------------------
+   
+   
+# (3)add some strategy
+def compareToWin(var1, var2, var3, aPlayer):
+    holder = [var1, var2, var3]    
+    if holder.count(aPlayer) == 2: # if at least 2 pieces are not equal to -
+        # print(aPlayer + " can win in this move");
+        # get indices of winning move
+        if holder.count(emptySpot) == 1:
+            col = holder.index(emptySpot)
+            print('spot to win is '+str(col))
+            return col           
+    return 99
 
 
+def recommendNextMove(aCurrentPlayer):        
+    for count in range(0, 3):	
+        col = compareToWin(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
+        if col != 99:
+            computerAnswer = str(count)+str(col)
+            print(computerAnswer)
+            return computerAnswer
+            
+        
+# ---------------------------------------------------
 
-
-#MAIN LOOP
+# MAIN LOOP
 while winner == 0:
     
     updateDisplay()
     
-    print '\ncurrent player is '+ currentPlayer + '\nenter your move as a combination of first a row number and then a column number, like 00 or 12'
-        
-    # recommendNextMove(currentPlayer)
-    
-    
+    print '\ncurrent player is '+currentPlayer+'\nenter your move as a combination of first a row number and then a column number, like 00 or 12'
+
     # move = raw_input('--> ')
     
     # (2)add a way for you to know who is proving input
-    if currentPlayer == " X ":
+    if currentPlayer == xPlayer:
         move = raw_input('--> ')
     else:
         move = identifyEmptySpots(currentPlayer)
-        
-    
+
     if inputIsValid(move):
         if spotFree(move):
             translateInput(move)
@@ -170,7 +150,7 @@ while winner == 0:
         
     if checkGrid() == 1:
         updateDisplay()
-        print('\nWINNER IS' + currentPlayer + "!!! END OF GAME")
+        print("\nWINNER IS" + currentPlayer + "!!! END OF GAME")
         winner = 1
         break
 
@@ -181,9 +161,6 @@ while winner == 0:
         break
    
     if shouldUpdatePlayer:
-        currentPlayer =  returnNextPlayer(currentPlayer)
+        currentPlayer = returnNextPlayer(currentPlayer)
     else:       
         print(message)
-
-#---------------------------------------------------
-
