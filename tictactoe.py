@@ -7,7 +7,6 @@ winner = 0;
 message = 'Blank message'
 
 #make a list to store the game
-
 row0 = [empt, empt, empt]
 row1 = [empt, empt, empt]
 row2 = [empt, empt, empt]
@@ -131,53 +130,3 @@ while winner == 0:
     else:       
         print(message)
 
-
-
-
-
-
-
-# if type(firstMove) is str:
-#     print 'input is a string'
-#     print 'length is ' + str(len(firstMove))
-#     if len(firstMove) != 2:
-#      print 'invalid input'
-#
-#
-#
-#     chars = set('abc,')
-#     if any((c in chars) for c in firstMove):
-#         print('Found a valid letter')
-#     else:
-#         print('No valid letter found')
-#
-#     chars = set('123,')
-#     if any((c in chars) for c in firstMove):
-#         print('Found a valid number')
-#     else:
-#         print('No valid number found')
-    
-    
-    #tranlating user input into a location on the gameboard
-    
-    
-    
-    #list of things to check for 
-    # make sure input valid in terms of length, within char and number set
-    
-    
-    # >>> i = 123
-    # >>> type(i)
-    # <type 'int'>
-    # >>> type(i) is int
-    # True
-    # >>> i = 123456789L
-    # >>> type(i)
-    # <type 'long'>
-    # >>> type(i) is long
-    # True
-    # >>> i = 123.456
-    # >>> type(i)
-    # <type 'float'>
-    # >>> type(i) is float
-    # True
