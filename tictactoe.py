@@ -80,6 +80,54 @@ def noMovesLeft():
                 return False
     return True
 
+#---------------------------------------------------
+
+def recommendNextMove(aCurrentPlayer):
+        
+    #ignoring other placement
+    #if it's the first move go for center
+    #if it's the second move go for corners 
+    #if it's the third move all else equal 
+
+    #considering other placement 
+        #look for where there are two in a row
+        #take third spot 
+        
+    for count in range(0, 3):	
+        compareTwo(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
+    #     compareTwo(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count], aCurrentPlayer)
+    # lDiagResult = compareTwo(gridSpots[0][0], gridSpots[1][1], gridSpots[2][2], aCurrentPlayer)
+    # rDiagResult = compareTwo(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0], aCurrentPlayer)
+
+
+def compareTwo(var1, var2, var3, aPlayer):
+    
+    holder = [var1, var2, var3]
+    
+    opposingPlayer = returnNextPlayer(aPlayer)
+    
+    #first check if you can win, then check if you can block
+
+    if aPlayer in holder: #if one of the pieces is equal to one of interest
+        if holder.count(' - ') < 2: #if at least 2 pieces are not equal to -
+            if var1 != ' - ' and var1 == var2 or var1 == var3 or  var2 == var3: #if two pieces are equal 
+                if var1 == ' - ' or  var2 == ' - ' or  var3 == ' - ': #if third piece is empty
+                    print(aPlayer + " can win in this move");
+                    return True
+    # else:
+ #        if var1 == opposingPlayer or var2 == opposingPlayer or var3 == opposingPlayer: #if one of the pieces is equal to one of interest
+ #            if var1 == var2 or var1 == var3 or  var2 == var3: #if two pieces are equl
+ #                if var1 == ' - ' or  var2 == ' - ' or  var3 == ' - ': #if third piece is empty
+ #                    print(opposingPlayer + " can be blocked in this move");
+ #                    return True
+
+    print('just pic an open spot');
+    return False
+#---------------------------------------------------
+
+
+
+
 #MAIN LOOP
 while winner == 0:
     
@@ -87,6 +135,8 @@ while winner == 0:
     
     print '\ncurrent player is '+ currentPlayer + '\nenter your move as a combination of first a row number and then a column number, like 00 or 12'
         
+    recommendNextMove(currentPlayer)    
+    
     move = raw_input('--> ')
     
     if inputIsValid(move):
@@ -114,4 +164,6 @@ while winner == 0:
         currentPlayer =  returnNextPlayer(currentPlayer)
     else:       
         print(message)
+
+#---------------------------------------------------
 
