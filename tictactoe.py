@@ -123,6 +123,16 @@ def compareTwo(var1, var2, var3, aPlayer):
 
     print('just pic an open spot');
     return False
+    
+    
+#(1)identify empty spots    
+def identifyEmptySpots(computerPlayer):
+    for countRow in range(0,3):
+        for countCol in range(0,3):
+            if gridSpots[countRow][countCol] == " - ": #really bad need to take formatting out of variable
+                computerAnswer = str(countRow)+str(countCol)
+                return computerAnswer
+    
 #---------------------------------------------------
 
 
@@ -135,9 +145,17 @@ while winner == 0:
     
     print '\ncurrent player is '+ currentPlayer + '\nenter your move as a combination of first a row number and then a column number, like 00 or 12'
         
-    recommendNextMove(currentPlayer)    
+    # recommendNextMove(currentPlayer)
+    
     
     move = raw_input('--> ')
+    
+    #(2)add a way for you to know who is proving input
+    # if currentPlayer == " X ":
+#         move = raw_input('--> ')
+#     else:
+#         move = identifyEmptySpots(currentPlayer)
+        
     
     if inputIsValid(move):
         if spotFree(move):
@@ -154,11 +172,13 @@ while winner == 0:
         updateDisplay()
         print('\nWINNER IS' + currentPlayer + "!!! END OF GAME")
         winner = 1
+        break
 
     if noMovesLeft():
         updateDisplay()
         print('\nNO WINNER. END OF GAME')
         winner = 1
+        break
    
     if shouldUpdatePlayer:
         currentPlayer =  returnNextPlayer(currentPlayer)
