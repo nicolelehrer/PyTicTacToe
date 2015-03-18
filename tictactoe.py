@@ -1,8 +1,8 @@
 # VARS
 emptySpot = " - "
 xPlayer = " X "
-oPlayer = " O "
-move = "99"
+oPlayer = " O "  # length of emptySpot, xPlayer, oPlayer should have same character length for layout
+move = "99"  # initial bogus value for debug
 currentPlayer = xPlayer
 winner = 0
 message = 'Blank message'
@@ -16,7 +16,6 @@ gridSpots = [row0, row1, row2]
 
 
 # FUNCTIONS
-# extra '\' let's you put code on multiple lines
 def updateDisplay():
     spacer = " " * len(xPlayer)
     colHeading = spacer + '0' + spacer + '1' + spacer + '2'
@@ -39,10 +38,10 @@ def translateInput(aMove):
     gridSpots[indexRow][indexCol] = currentPlayer
 
 
-def spotFree(aMove):
+def spotsStillFree(aMove):
     indexRow = int(aMove[0])
     indexCol = int(aMove[1])
-    if gridSpots[indexRow][indexCol] == " - ":
+    if gridSpots[indexRow][indexCol] == emptySpot:
         return True
     else:
         return False
@@ -52,7 +51,7 @@ def inputIsValid(aMove):
     # length
     if len(aMove)!=2:
         return False
-    # 'range'
+    # range, type
     chars = set('012')
     if aMove[0] not in chars or aMove[1] not in chars:
         return False
@@ -60,25 +59,22 @@ def inputIsValid(aMove):
 
 
 def compareThree(var1, var2, var3):
-    if var1 != emptySpot:
-        if var1 == var2 and var1 == var3:
-            return 1
-        else:
-            return 0
+    if var1 != emptySpot and var1 == var2 and var1 == var3:
+        return True
     else:
-        return 0
+        return False
 
 
-def checkGrid():
+def evalGameBoard():
     for count in range(0, 3):	
         aRowResult = compareThree(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2])
         aColResult = compareThree(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count])
-        if aRowResult or aColResult == 1:
-            return 1
+        if aRowResult or aColResult:
+            return True
     lDiagResult = compareThree(gridSpots[0][0], gridSpots[1][1], gridSpots[2][2])
     rDiagResult = compareThree(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0])
-    if lDiagResult or rDiagResult == 1:
-        return 1
+    if lDiagResult or rDiagResult:
+        return True
 
 
 def noMovesLeft():
@@ -136,7 +132,7 @@ while winner == 0:
     
     updateDisplay()
     
-    print '\ncurrent player is '+currentPlayer+'\nenter your move as a combination of first a row number and then a column number, like 00 or 12'
+    print '\nCurrent player is '+currentPlayer+'\nEnter your move as a combination of first a row number and then a column number, like 00 or 12'
 
     # move = raw_input('--> ')
     
@@ -151,7 +147,7 @@ while winner == 0:
 
 
     if inputIsValid(move):
-        if spotFree(move):
+        if spotsStillFree(move):
             translateInput(move)
             shouldUpdatePlayer = True
         else:
@@ -161,15 +157,15 @@ while winner == 0:
         message = '\n----input is not valid-----'
         shouldUpdatePlayer = False
         
-    if checkGrid() == 1:
+    if evalGameBoard() == 1:
         updateDisplay()
-        print("\nWINNER IS" + currentPlayer + "!!! END OF GAME")
+        print("\nWINNER IS" + currentPlayer + "!!! END OF GAME\n")
         winner = 1
         break
 
     if noMovesLeft():
         updateDisplay()
-        print('\nNO WINNER. END OF GAME')
+        print('\nNO WINNER. END OF GAME\n')
         winner = 1
         break
    
