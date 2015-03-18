@@ -148,13 +148,13 @@ while winner == 0:
     # recommendNextMove(currentPlayer)
     
     
-    move = raw_input('--> ')
+    # move = raw_input('--> ')
     
-    #(2)add a way for you to know who is proving input
-    # if currentPlayer == " X ":
-#         move = raw_input('--> ')
-#     else:
-#         move = identifyEmptySpots(currentPlayer)
+    # (2)add a way for you to know who is proving input
+    if currentPlayer == " X ":
+        move = raw_input('--> ')
+    else:
+        move = identifyEmptySpots(currentPlayer)
         
     
     if inputIsValid(move):
