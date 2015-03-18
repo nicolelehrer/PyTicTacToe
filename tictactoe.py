@@ -22,6 +22,7 @@ def updateDisplay():
                         '\n2 '+str(gridSpots[2][0])+' '+str(gridSpots[2][1])+' '+str(gridSpots[2][2])
     print '\n'+gameboard+'\n'
     
+#---------------------------------------------------
     
 def returnNextPlayer(aCurrentPlayer):
     if aCurrentPlayer == ' X ':
@@ -29,15 +30,36 @@ def returnNextPlayer(aCurrentPlayer):
     else:
         return ' X '
 
+#---------------------------------------------------
+
 def translateInput(aMove):
     indexRow = int(aMove[0])
     indexCol = int(aMove[1])
+    gridSpots[indexRow][indexCol] = currentPlayer
+            
+#---------------------------------------------------
+
+def spotFree(aMove):
+    indexRow = int(aMove[0])
+    indexCol = int(aMove[1])
     if gridSpots[indexRow][indexCol] == " - ":
-         gridSpots[indexRow][indexCol] = currentPlayer
-         return True
+        return True
     else:
         return False
+            
+#---------------------------------------------------
 
+def inputIsValid(aMove):
+    #length
+    if len(aMove)!=2:
+        return False
+    #range
+    chars = set('012')
+    if  aMove[0] not in chars or aMove[1] not in chars:
+        return False
+    return True
+        
+#---------------------------------------------------
 
 def compareThree(var1, var2, var3):
 	if var1 == " X " or var1 == " O ": #really bad need to take formatting out of variable
@@ -50,7 +72,8 @@ def compareThree(var1, var2, var3):
 			    return 0
 	else:
 		return 0
-             
+            
+     
 def checkGrid():
     for count in range(0, 3):	
        aRowResult = compareThree(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2])
@@ -61,6 +84,8 @@ def checkGrid():
     rDiagResult = compareThree(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0])
     if lDiagResult or rDiagResult == 1:
         return 1
+#---------------------------------------------------
+
 
 def noMovesLeft():
     for countRow in range(0,3):
@@ -68,6 +93,8 @@ def noMovesLeft():
             if gridSpots[countRow][countCol] == " - ": #really bad need to take formatting out of variable
                 return False
     return True
+
+#---------------------------------------------------
 
 
 while winner == 0:
@@ -78,9 +105,15 @@ while winner == 0:
         
     move = raw_input('--> ')
     
-    if translateInput(move):
-        shouldUpdatePlayer = True
+    if inputIsValid(move):
+        if spotFree(move):
+            translateInput(move)
+            shouldUpdatePlayer = True
+        else:
+            message = '\n----spot taken - choose another spot----'
+            shouldUpdatePlayer = False
     else:
+        message = '\n----input is not valid-----'
         shouldUpdatePlayer = False
         
     if checkGrid() == 1:
@@ -96,7 +129,7 @@ while winner == 0:
     if shouldUpdatePlayer:
         currentPlayer =  returnNextPlayer(currentPlayer)
     else:       
-        print('\n----spot taken - choose another spot----')
+        print(message)
 
 
 
