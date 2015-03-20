@@ -1,3 +1,5 @@
+import random
+
 # VARS
 emptySpot = " - "
 xPlayer = " X "
@@ -6,6 +8,7 @@ move = "99"  # initial bogus value for debug
 currentPlayer = xPlayer
 winner = 0
 message = 'Blank message'
+emptySpots = []  # empty spots from which computer can select next move
 
 # make a list of lists to store the game
 row0 = [emptySpot, emptySpot, emptySpot]
@@ -87,15 +90,14 @@ def noMovesLeft():
 # ---------------------------------------------------
 
     
-# (1)identify empty spots
+# (1)choose an empty random spots
 def identifyEmptySpots(computerPlayer):
     for countRow in range(0, 3):
         for countCol in range(0, 3):
-            # if gridSpots[countRow][countCol] == emptySpot:
             if gridSpots[countCol][countRow] == emptySpot:
-                # computerAnswer = str(countRow)+str(countCol)
-                computerAnswer = str(countCol)+str(countRow)
-                return computerAnswer
+                emptySpots.append(str(countCol)+str(countRow))
+    print(random.choice(emptySpots))
+    return random.choice(emptySpots)
    
    
 # (3)add some strategy
@@ -140,10 +142,10 @@ while winner == 0:
     if currentPlayer == xPlayer:
         move = raw_input('--> ')
     else:
-        if recommendNextMove(currentPlayer) != 99:
-            move = recommendNextMove(currentPlayer)
-        else:
-            move = identifyEmptySpots(currentPlayer)
+        # if recommendNextMove(currentPlayer) != 99:
+        #     move = recommendNextMove(currentPlayer)
+        # else:
+        move = identifyEmptySpots(currentPlayer)
 
 
     if inputIsValid(move):
