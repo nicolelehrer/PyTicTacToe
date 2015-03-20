@@ -2,8 +2,8 @@ import random
 
 # VARS
 emptySpot = " - "
-xPlayer = " X "
-oPlayer = " O "  # length of emptySpot, xPlayer, oPlayer should have same character length for layout
+xPlayer = " x "
+oPlayer = " o "  # length of emptySpot, xPlayer, oPlayer should have same character length for layout
 move = "99"  # initial bogus value for debug
 currentPlayer = xPlayer
 winner = 0
@@ -91,81 +91,84 @@ def noMovesLeft():
 
 # ---------------------------------------------------
 
-    
+
+
+
+# want to find a patter of two of one and one of the other
+# relevant inputs are one player type (for win or block) and one empty space
+# or two empty spaces and one player type
+# check for win (2 of current and 1 empty - you want to return the empty
+# check for block (2 of opponent and 1 empty - "
+# check fro duo 2 of empty and one current - you want to return the empty you always want tor return the empty
+
+
 # (1)choose an empty random spots
-def identifyEmptySpots(computerPlayer):
+#  -- this can be extended to choose the best spot, ie middle one then corners then anything else
+def pickRandomEmptySpot(computerPlayer):
     for countRow in range(0, 3):
         for countCol in range(0, 3):
             if gridSpots[countCol][countRow] == emptySpot:
                 emptySpots.append(str(countCol)+str(countRow))
     print(random.choice(emptySpots))
     return random.choice(emptySpots)
-   
-   
-# (3)add some strategy
-def compareToWin(var1, var2, var3, aPlayer):
-    holder = [var1, var2, var3]    
-    if holder.count(aPlayer) == 2 and holder.count(emptySpot) == 1:  # if two instances of current player and 1 empty
-        index = holder.index(emptySpot)
-        return index
+
+
+def searchListForTwoAndOne(aListOfThree, typeTwo, typeOne):
+    if aListOfThree.count(typeOne) == 1 and aListOfThree.count(typeTwo) == 2:
+        return aListOfThree.index(emptySpot) # you always want to return the empty spot index
     return noSolFlag
 
 
-def completeATrio(aCurrentPlayer):
-    for count in range(0, 3):	
-        aRecCol = compareToWin(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
-        aRecRow = compareToWin(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count], aCurrentPlayer)
-        if aRecRow != noSolFlag:
-            computerAnswer = str(aRecRow)+str(count)
-            print(computerAnswer)
-            return computerAnswer
-        elif aRecCol != noSolFlag:
-            computerAnswer = str(count)+str(aRecCol)
-            print(computerAnswer)
-            return computerAnswer
-    aRecLDiag = compareToWin(gridSpots[0][0], gridSpots[1][1], gridSpots[2][2], aCurrentPlayer)
-    if aRecLDiag != noSolFlag:
-        computerAnswer = str(aRecLDiag)+str(aRecLDiag)
-        print(computerAnswer)
-        return computerAnswer
-    aRecRDiag = compareToWin(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0], aCurrentPlayer)
-    if aRecRDiag != noSolFlag:
-        computerAnswer = str(aRecRDiag)+str(2-aRecRDiag)
-        print(computerAnswer)
-        return  computerAnswer
-    return noSolFlag
+def searchGridForTwoAndOne(typeTwo, typeOne):
 
-
-def compareForDuo(var1, var2, var3, aPlayer):
-    holder = [var1, var2, var3]
-    if holder.count(aPlayer) == 1 and holder.count(emptySpot) == 2:
-        return holder.index(emptySpot) # grab first empty
-    return noSolFlag
-
-
-def completeADuo(aCurrentPlayer):
     for count in range(0, 3):
-        aRecCol = compareForDuo(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
-        aRecRow = compareForDuo(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count], aCurrentPlayer)
-        if aRecRow != noSolFlag:
-            computerAnswer = str(aRecRow)+str(count)
-            print(computerAnswer)
-            return computerAnswer
-        elif aRecCol != noSolFlag:
-            computerAnswer = str(count)+str(aRecCol)
-            print(computerAnswer)
-            return computerAnswer
-    aRecLDiag = compareForDuo(gridSpots[0][0], gridSpots[1][1], gridSpots[2][2], aCurrentPlayer)
-    if aRecLDiag != noSolFlag:
-        computerAnswer = str(aRecLDiag)+str(aRecLDiag)
-        print(computerAnswer)
-        return computerAnswer
-    aRecRDiag = compareForDuo(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0], aCurrentPlayer)
-    if aRecRDiag != noSolFlag:
-        computerAnswer = str(aRecRDiag)+str(2-aRecRDiag)
-        print(computerAnswer)
-        return  computerAnswer
+
+        aRow = gridSpots[count][0], gridSpots[count][1], gridSpots[count][2]
+        aCol = gridSpots[0][count], gridSpots[1][count], gridSpots[2][count]
+
+        colIndex = searchListForTwoAndOne(aRow, typeTwo, typeOne)
+        if colIndex != noSolFlag:
+            return str(count)+str(colIndex)
+
+        rowIndex = searchListForTwoAndOne(aCol, typeTwo, typeOne)
+        if rowIndex != noSolFlag:
+            return str(rowIndex)+str(count)
+
+    leftDiag = [gridSpots[0][0], gridSpots[1][1], gridSpots[2][2]]
+    rightDiag = [gridSpots[0][2], gridSpots[1][1], gridSpots[2][0]]
+
+    lDiagIndex = searchListForTwoAndOne(leftDiag, typeTwo, typeOne)
+    if lDiagIndex != noSolFlag:
+        return str(lDiagIndex)+str(lDiagIndex)
+
+    rDiagIndex = searchListForTwoAndOne(rightDiag, typeTwo, typeOne)
+    if rDiagIndex !=noSolFlag:
+        return str(rDiagIndex)+str(2-rDiagIndex)
+
     return noSolFlag
+
+def returnMoveForComputer(aPlayer):
+
+    moveForWin = searchGridForTwoAndOne(currentPlayer, emptySpot)
+    if moveForWin != noSolFlag:
+        print("strategic WIN")
+        return moveForWin
+
+    moveForBlock = searchGridForTwoAndOne(returnNextPlayer(currentPlayer), emptySpot)
+    if moveForBlock != noSolFlag:
+        print("strategic BLOCK")
+        return moveForBlock
+
+    moveForMakeTwo = searchGridForTwoAndOne(emptySpot, currentPlayer)
+    if moveForMakeTwo != noSolFlag:
+        print("strategic DUO")
+        return moveForMakeTwo
+
+    moveRandom = pickRandomEmptySpot(currentPlayer)
+    print("random")
+    return moveRandom
+
+
 # ---------------------------------------------------
 
 # MAIN LOOP
@@ -181,19 +184,7 @@ while winner == 0:
     if currentPlayer == xPlayer:
         move = raw_input('--> ')
     else:
-        if completeATrio(currentPlayer) != noSolFlag:
-            print("strategic WIN")
-            move = completeATrio(currentPlayer)
-        elif completeATrio(returnNextPlayer(currentPlayer)) != noSolFlag:
-            print("strategic BLOCK")
-            move = completeATrio(returnNextPlayer(currentPlayer))
-        elif completeADuo(currentPlayer) != noSolFlag:
-            print("strategic DUO")
-            move = completeADuo(currentPlayer)
-        else:
-            print("random")
-            move = identifyEmptySpots(currentPlayer)
-
+       move = returnMoveForComputer(currentPlayer)
 
     if inputIsValid(move):
         if spotsStillFree(move):
