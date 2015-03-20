@@ -107,7 +107,6 @@ def compareToWin(var1, var2, var3, aPlayer):
     holder = [var1, var2, var3]    
     if holder.count(aPlayer) == 2 and holder.count(emptySpot) == 1:  # if two instances of current player and 1 empty
         index = holder.index(emptySpot)
-        print('spot to win is '+str(index))
         return index
     return noSolFlag
 
@@ -151,8 +150,11 @@ while winner == 0:
         move = raw_input('--> ')
     else:
         if recommendNextMove(currentPlayer) != noSolFlag:
-            print("strategic")
+            print("strategic WIN")
             move = recommendNextMove(currentPlayer)
+        elif recommendNextMove(returnNextPlayer(currentPlayer)) != noSolFlag:
+            print("strategic BLOCK")
+            move = recommendNextMove(returnNextPlayer(currentPlayer))
         else:
             print("random")
             move = identifyEmptySpots(currentPlayer)
