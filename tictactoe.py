@@ -10,6 +10,8 @@ winner = 0
 message = 'Blank message'
 emptySpots = []  # empty spots from which computer can select next move
 
+noSolFlag = "na"
+
 # make a list of lists to store the game
 row0 = [emptySpot, emptySpot, emptySpot]
 row1 = [emptySpot, emptySpot, emptySpot]
@@ -103,30 +105,36 @@ def identifyEmptySpots(computerPlayer):
 # (3)add some strategy
 def compareToWin(var1, var2, var3, aPlayer):
     holder = [var1, var2, var3]    
-    if holder.count(aPlayer) == 2:  # if there are two instances of the current player
-        if holder.count(emptySpot) == 1:  # and a free spot to move to
-            col = holder.index(emptySpot)
-            print('spot to win is '+str(col))
-            return col           
-    return 99
+    if holder.count(aPlayer) == 2 and holder.count(emptySpot) == 1:  # if two instances of current player and 1 empty
+        index = holder.index(emptySpot)
+        print('spot to win is '+str(index))
+        return index
+    return noSolFlag
 
 
 def recommendNextMove(aCurrentPlayer):        
     for count in range(0, 3):	
-        aRow = compareToWin(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
-        aCol = compareToWin(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count], aCurrentPlayer)
-
-        if aCol != 99:
-            computerAnswer = str(aCol)+str(count)
+        aRecCol = compareToWin(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
+        aRecRow = compareToWin(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count], aCurrentPlayer)
+        if aRecRow != noSolFlag:
+            computerAnswer = str(aRecRow)+str(count)
             print(computerAnswer)
             return computerAnswer
-        elif aRow != 99:
-            computerAnswer = str(count)+str(aRow)
+        elif aRecCol != noSolFlag:
+            computerAnswer = str(count)+str(aRecCol)
             print(computerAnswer)
             return computerAnswer
-        else:
-            return 99
-        
+    aRecLDiag = compareToWin(gridSpots[0][0], gridSpots[1][1], gridSpots[2][2], aCurrentPlayer)
+    if aRecLDiag != noSolFlag:
+        computerAnswer = str(aRecLDiag)+str(aRecLDiag)
+        print(computerAnswer)
+        return computerAnswer
+    aRecRDiag = compareToWin(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0], aCurrentPlayer)
+    if aRecRDiag != noSolFlag:
+        computerAnswer = str(aRecRDiag)+str(2-aRecRDiag)
+        print(computerAnswer)
+        return  computerAnswer
+    return noSolFlag
 # ---------------------------------------------------
 
 # MAIN LOOP
@@ -142,10 +150,12 @@ while winner == 0:
     if currentPlayer == xPlayer:
         move = raw_input('--> ')
     else:
-        # if recommendNextMove(currentPlayer) != 99:
-        #     move = recommendNextMove(currentPlayer)
-        # else:
-        move = identifyEmptySpots(currentPlayer)
+        if recommendNextMove(currentPlayer) != noSolFlag:
+            print("strategic")
+            move = recommendNextMove(currentPlayer)
+        else:
+            print("random")
+            move = identifyEmptySpots(currentPlayer)
 
 
     if inputIsValid(move):
