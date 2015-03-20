@@ -111,7 +111,7 @@ def compareToWin(var1, var2, var3, aPlayer):
     return noSolFlag
 
 
-def recommendNextMove(aCurrentPlayer):        
+def completeATrio(aCurrentPlayer):
     for count in range(0, 3):	
         aRecCol = compareToWin(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
         aRecRow = compareToWin(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count], aCurrentPlayer)
@@ -134,6 +134,38 @@ def recommendNextMove(aCurrentPlayer):
         print(computerAnswer)
         return  computerAnswer
     return noSolFlag
+
+
+def compareForDuo(var1, var2, var3, aPlayer):
+    holder = [var1, var2, var3]
+    if holder.count(aPlayer) == 1 and holder.count(emptySpot) == 2:
+        return holder.index(emptySpot) # grab first empty
+    return noSolFlag
+
+
+def completeADuo(aCurrentPlayer):
+    for count in range(0, 3):
+        aRecCol = compareForDuo(gridSpots[count][0], gridSpots[count][1], gridSpots[count][2], aCurrentPlayer)
+        aRecRow = compareForDuo(gridSpots[0][count], gridSpots[1][count], gridSpots[2][count], aCurrentPlayer)
+        if aRecRow != noSolFlag:
+            computerAnswer = str(aRecRow)+str(count)
+            print(computerAnswer)
+            return computerAnswer
+        elif aRecCol != noSolFlag:
+            computerAnswer = str(count)+str(aRecCol)
+            print(computerAnswer)
+            return computerAnswer
+    aRecLDiag = compareForDuo(gridSpots[0][0], gridSpots[1][1], gridSpots[2][2], aCurrentPlayer)
+    if aRecLDiag != noSolFlag:
+        computerAnswer = str(aRecLDiag)+str(aRecLDiag)
+        print(computerAnswer)
+        return computerAnswer
+    aRecRDiag = compareForDuo(gridSpots[0][2], gridSpots[1][1], gridSpots[2][0], aCurrentPlayer)
+    if aRecRDiag != noSolFlag:
+        computerAnswer = str(aRecRDiag)+str(2-aRecRDiag)
+        print(computerAnswer)
+        return  computerAnswer
+    return noSolFlag
 # ---------------------------------------------------
 
 # MAIN LOOP
@@ -149,12 +181,15 @@ while winner == 0:
     if currentPlayer == xPlayer:
         move = raw_input('--> ')
     else:
-        if recommendNextMove(currentPlayer) != noSolFlag:
+        if completeATrio(currentPlayer) != noSolFlag:
             print("strategic WIN")
-            move = recommendNextMove(currentPlayer)
-        elif recommendNextMove(returnNextPlayer(currentPlayer)) != noSolFlag:
+            move = completeATrio(currentPlayer)
+        elif completeATrio(returnNextPlayer(currentPlayer)) != noSolFlag:
             print("strategic BLOCK")
-            move = recommendNextMove(returnNextPlayer(currentPlayer))
+            move = completeATrio(returnNextPlayer(currentPlayer))
+        elif completeADuo(currentPlayer) != noSolFlag:
+            print("strategic DUO")
+            move = completeADuo(currentPlayer)
         else:
             print("random")
             move = identifyEmptySpots(currentPlayer)
